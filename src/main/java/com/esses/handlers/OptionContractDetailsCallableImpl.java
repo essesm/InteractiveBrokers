@@ -6,26 +6,26 @@ import com.ib.client.ContractDetails;
 import com.ib.client.EClientSocket;
 import lombok.extern.slf4j.Slf4j;
 
-import java.util.function.Consumer;
+import java.util.concurrent.CompletableFuture;
 
 @Slf4j
 public class OptionContractDetailsCallableImpl implements OptionContractDetailsCallable {
 
     private final EClientSocket client;
-    private final Consumer<OptionChain> callback;
+    private final CompletableFuture<OptionChain> future;
     private final OptionChain.Builder optionChainBuilder;
 
     private int outstandingRequests = 0;
 
-    public OptionContractDetailsCallableImpl(EClientSocket client, Consumer<OptionChain> callback) {
+    public OptionContractDetailsCallableImpl(EClientSocket client, CompletableFuture<OptionChain> future) {
         this.client = client;
-        this.callback = callback;
+        this.future = future;
         this.optionChainBuilder = new OptionChain.Builder();
     }
 
     @Override
     public void onReceiveOptionContractDetails(ContractDetails contractDetails) {
-        OptionContractMarketDataCallableImpl handler = new OptionContractMarketDataCallableImpl(optionChainBuilder, contractDetails.contract(), ++outstandingRequests, callback);
+        OptionContractMarketDataCallableImpl handler = new OptionContractMarketDataCallableImpl(optionChainBuilder, contractDetails.contract(), ++outstandingRequests, future);
         EWrapperCallbackHandlers.getInstance().call(reqId ->
                 client.reqMktData(reqId, contractDetails.contract(), "", true, null), handler);
     }

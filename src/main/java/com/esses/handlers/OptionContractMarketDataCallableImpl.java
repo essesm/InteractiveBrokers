@@ -5,20 +5,22 @@ import com.esses.options.OptionChain;
 import com.ib.client.Contract;
 import lombok.extern.slf4j.Slf4j;
 
-import java.util.function.Consumer;
+import java.util.concurrent.CompletableFuture;
+
+import static com.google.common.base.Preconditions.checkState;
 
 @Slf4j
 public class OptionContractMarketDataCallableImpl implements OptionContractMarketDataCallable {
     private final OptionChain.Builder optionChainBuilder;
     private final Contract contract;
-    private final Consumer<OptionChain> callback;
+    private final CompletableFuture<OptionChain> future;
     private int outstandingRequests;
 
-    public OptionContractMarketDataCallableImpl(OptionChain.Builder optionChainBuilder, Contract contract, int outstandingRequests, Consumer<OptionChain> callback) {
+    public OptionContractMarketDataCallableImpl(OptionChain.Builder optionChainBuilder, Contract contract, int outstandingRequests, CompletableFuture<OptionChain> future) {
         this.optionChainBuilder = optionChainBuilder;
         this.contract = contract;
         this.outstandingRequests = outstandingRequests;
-        this.callback = callback;
+        this.future = future;
     }
 
     @Override
@@ -31,8 +33,8 @@ public class OptionContractMarketDataCallableImpl implements OptionContractMarke
     @Override
     public void onRequestOptionContractMarketDataEnd() {
         if (--outstandingRequests == 0) {
-            OptionChain build = optionChainBuilder.build();
-            callback.accept(build);
+            OptionChain optionChain = optionChainBuilder.build();
+            checkState(future.complete(optionChain));
         }
     }
 }
