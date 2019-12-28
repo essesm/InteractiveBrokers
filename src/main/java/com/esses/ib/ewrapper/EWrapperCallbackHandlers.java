@@ -21,6 +21,7 @@ public class EWrapperCallbackHandlers {
      * Singleton because we don't want to reuse the same reqId for different requests.
      */
     private static final EWrapperCallbackHandlers instance = new EWrapperCallbackHandlers();
+    private EWrapperCallbackHandlers() { }
 
     private final AtomicInteger counter = new AtomicInteger();
     private final ConcurrentHashMap<Integer, OptionContractDetailsCallable> optionChainResponseHandlers = new ConcurrentHashMap<>();

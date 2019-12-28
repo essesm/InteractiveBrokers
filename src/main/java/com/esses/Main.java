@@ -1,22 +1,22 @@
 package com.esses;
 
 import com.esses.ib.ewrapper.EWrapperImpl;
-import com.esses.options.IncompleteOptionContract;
-import com.esses.options.OptionChain;
-import com.ib.client.Types;
+import com.esses.resources.OptionChainResource;
+import io.dropwizard.Application;
+import io.dropwizard.Configuration;
+import io.dropwizard.setup.Environment;
 import lombok.extern.slf4j.Slf4j;
 
-import java.time.LocalDate;
-import java.time.Month;
-import java.util.concurrent.ExecutionException;
-
 @Slf4j
-public class Main {
+public class Main extends Application<Configuration> {
 
-    public static void main(String[] args) throws ExecutionException, InterruptedException {
+    public static void main(String[] args) throws Exception {
+        new Main().run(args);
+    }
+
+    @Override
+    public void run(Configuration configuration, Environment environment) {
         InteractiveBrokersAPI api = new EWrapperImpl().getAPI();
-        IncompleteOptionContract put = new IncompleteOptionContract("AAPL", LocalDate.of(2020, Month.JANUARY, 17), Types.Right.Put);
-        OptionChain optionChain = api.requestOptionChain(put).get();
-        optionChain.print();
+        environment.jersey().register(new OptionChainResource(api));
     }
 }

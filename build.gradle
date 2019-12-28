@@ -7,6 +7,10 @@ application {
     mainClassName = 'com.esses.Main'
 }
 
+run {
+    args 'server'
+}
+
 group 'org.example'
 version '1.0-SNAPSHOT'
 
@@ -15,6 +19,9 @@ repositories {
 }
 
 dependencies {
+    // Dropwizard dependencies
+    implementation 'io.dropwizard:dropwizard-core:2.0.0'
+
     // Lombok and logging dependencies
     compileOnly 'org.projectlombok:lombok:1.18.10'
     annotationProcessor 'org.projectlombok:lombok:1.18.10'
