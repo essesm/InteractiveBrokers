@@ -21,4 +21,8 @@ public class InteractiveBrokersAPI {
         EWrapperCallbackHandlers.getInstance().call(reqId -> clientSocket.reqContractDetails(reqId, put), new OptionContractDetailsCallableImpl(clientSocket, future));
         return future;
     }
+
+    public boolean isConnected() {
+        return clientSocket.isConnected();
+    }
 }
