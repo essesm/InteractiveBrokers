@@ -21,6 +21,7 @@ repositories {
 dependencies {
     // Dropwizard dependencies
     implementation 'io.dropwizard:dropwizard-core:2.0.0'
+    implementation 'io.dropwizard:dropwizard-client:2.0.0'
 
     // Lombok and logging dependencies
     compileOnly 'org.projectlombok:lombok:1.18.10'

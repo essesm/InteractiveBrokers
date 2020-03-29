@@ -32,10 +32,12 @@ public class EWrapperImpl implements EWrapper {
             MARKET_DATA_CONNECTION_INACTIVE
     );
 
+    private static final int SECURITY_NOT_FOUND_ERROR_CODE = 200;
     private static final int COULD_NOT_CONNECT_TO_TWS_ERROR_CODE = 502;
     private static final int NOT_CONNECTED_TO_TWS_ERROR_CODE = 504;
     private static final int BAD_MESSAGE_LENGTH_ERROR_CODE = 507;
     private static final Set<Integer> ERROR_CODES_THAT_SHOULD_THROW_RUNTIME_EXCEPTIONS = Set.of(
+            SECURITY_NOT_FOUND_ERROR_CODE,
             COULD_NOT_CONNECT_TO_TWS_ERROR_CODE,
             NOT_CONNECTED_TO_TWS_ERROR_CODE,
             BAD_MESSAGE_LENGTH_ERROR_CODE
